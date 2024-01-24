@@ -10,6 +10,9 @@ export default {
       container: {
         center: true, 
         padding: "1.25rem"
+      }, 
+      colors: {
+        primary: "#00D991" 
       }
     },
   },
