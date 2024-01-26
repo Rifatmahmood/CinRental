@@ -5,6 +5,7 @@ export default {
     './src/**/*.js',
     './src/**/*.jsx',
   ],
+  darkMode: 'class', 
   theme: {
     extend: {
       container: {

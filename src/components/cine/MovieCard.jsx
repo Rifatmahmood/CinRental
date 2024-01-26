@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Rating from "./Rating"
 import { getImgUrl } from '../../utils/cine-utility'
 import MovieDetailsModal from './MovieDetailsModal';
+import { MovieContext } from '../../context';
 
 export default function MovieCard({ movie }) {
   const [isModal, setIsModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  // const [cart, setToCart] = useState([]);
+  const { cartData, setCartData } = useContext(MovieContext);
 
   function handleCloseModal() {
     setSelectedMovie(null);
@@ -17,14 +18,16 @@ export default function MovieCard({ movie }) {
     setIsModal(true);
   }
 
-  // function handleCart() {
-  //   const newCart = [...cart];
-  //   setToCart([
-  //     ...newCart,
-  //     selectedMovie
-  //   ])
-  //   console.log(newCart);
-  // }
+  function handleAddToCart(e, movie) {
+    e.stopPropagation();
+    const found = cartData.find((item) => item.id === movie.id); 
+    if (!found) {
+      setCartData([...cartData, movie])
+    } else {
+      console.error(`the movie ${movie.title} has been added to the cart already.`)
+    }
+  }
+
 
 
   return (
@@ -40,7 +43,7 @@ export default function MovieCard({ movie }) {
             </div>
 
             <a className="bg-primary rounded-lg py-2 px-5 flex items-center justify-center gap-2 text-[#171923] font-semibold text-sm"
-              // onClick={handleCart}
+              onClick={(e) => handleAddToCart(e, movie)}
               href="#">
               <img src="./assets/tag.svg" alt="" />
               <span >${movie.price} | Add to Cart</span>
@@ -48,7 +51,7 @@ export default function MovieCard({ movie }) {
           </figcaption>
         </a>
       </figure >
-      {isModal && <MovieDetailsModal movie={selectedMovie} onCancel={handleCloseModal} />
+      {isModal && <MovieDetailsModal movie={selectedMovie} onCancel={handleCloseModal} onAddToCart={handleAddToCart} />
       }
     </>
   )
